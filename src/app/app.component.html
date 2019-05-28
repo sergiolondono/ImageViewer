@@ -1,8 +1,9 @@
 <h1>
   Image Viewer
 </h1>
-<app-image-viewer [images]="[documents]"
+ <app-image-viewer [images]="[image]"
+ [download]=false
+ [showPDFOnlyOption]=true
 [idContainer]="'idOnHTML'"
 [loadOnInit]="true"></app-image-viewer>
 
-{{documents}}
