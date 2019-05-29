@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentsService } from './documents.service';
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: "app-root",
@@ -8,7 +10,13 @@ import { DocumentsService } from './documents.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor() { }
+  constructor(private auth: AuthService, router: Router) {
+    if(this.auth.isAuthenticated())
+    {
+      let returnUrl = localStorage.getItem('returnUrl');
+      router.navigateByUrl(returnUrl);
+    }    
+   }
 
   ngOnInit() {
   }
