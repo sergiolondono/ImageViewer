@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class AuthService {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private authUser: LoginService) { }
 
   isAuthenticated(){
     if(localStorage.getItem('user') != null)
@@ -23,6 +25,11 @@ export class AuthService {
   login(credentials){
     let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
     localStorage.setItem('returnUrl', returnUrl);
+
+    this.authUser.AuthenticatedUser({
+      name : "admin",
+      password : "123456"
+    });
 
     if(credentials.email == "sa@gmail.com" && credentials.password == "12")
     {
