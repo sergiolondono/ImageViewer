@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { LoginService } from './login.service';
+
+import { User } from './_models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +11,13 @@ import { LoginService } from './login.service';
 export class AuthService {
 
   user$: Observable<any>;
+  private currentUserSubject: BehaviorSubject<User>;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authUser: LoginService) { }
+    private authUser: LoginService) {
+     }
 
   isAuthenticated(){
     if(localStorage.getItem('user') != null)
@@ -48,6 +52,7 @@ export class AuthService {
 
   logout(){
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     this.router.navigateByUrl('/home');
   }
 

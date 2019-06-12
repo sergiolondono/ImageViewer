@@ -15,6 +15,14 @@ import { HomeComponent } from './home/home.component';
 import { BsNavbarComponent } from './bs-navbar/bs-navbar.component';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth-guard.service';
+import { AuthHttp, AuthConfig, AUTH_PROVIDERS, provideAuth, AuthModule } from 'angular2-jwt';
+import { Http, RequestOptions } from '@angular/http';
+
+export function authHttpServiceFactory(http: Http, options: RequestOptions) {
+  return new AuthHttp(new AuthConfig({
+    tokenGetter: (() => localStorage.getItem('token'))
+  }), http, options);
+}
 
 @NgModule({
   declarations: [
@@ -25,6 +33,15 @@ import { AuthGuard } from './auth-guard.service';
     BsNavbarComponent
   ],
   imports: [
+    AuthModule.forRoot(new AuthConfig({
+      headerName: 'Authorization',
+      headerPrefix: 'Bearer',
+      tokenName: 'token',
+      tokenGetter: (() => localStorage.getItem('token') || ''),
+      globalHeaders: [{ 'Content-Type': 'application/json' }],
+      noJwtError: true
+    })),
+
     BrowserModule,
     ImageViewerModule,
     HttpClientModule,
@@ -38,7 +55,7 @@ import { AuthGuard } from './auth-guard.service';
       { path: 'indexacion', component: IndexacionComponent, canActivate: [AuthGuard]  }
     ])
   ],
-  providers: [AuthService],
+  providers: [AuthService,  AuthHttp],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
